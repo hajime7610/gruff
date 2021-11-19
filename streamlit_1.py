@@ -50,9 +50,8 @@ else:
 
 
 #メディア（画像）の追加
-st.write("#メディア（画像）の追加")
-image = "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftwitfukuoka.com%2F%3Fp%3D98514&psig=AOvVaw0vUU41WJMFE1OWH3OgX2Kq&ust=1637384348218000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPDM5JnSo_QCFQAAAAAdAAAAABAD"
-st.image(image, caption="中秋の名月", width=500, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+st.write("#メディア（画像）の追加") 
+st.image("https://www.google.com/url?sa=i&url=https%3A%2F%2Ftwitfukuoka.com%2F%3Fp%3D98514&psig=AOvVaw0vUU41WJMFE1OWH3OgX2Kq&ust=1637384348218000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCPDM5JnSo_QCFQAAAAAdAAAAABAD", caption="令和", width=500, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 
 #レイアウト設定
 add_selectbox = st.sidebar.selectbox(
