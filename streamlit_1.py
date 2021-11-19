@@ -1,65 +1,56 @@
-import streamlit as st
 import pandas as pd
-from PIL import Image
+import plotly.figure_factory as ff
+import plotly.graph_objects as go
+import streamlit as st
+import sklearn 
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import plotly.express as px
 
-#テキストの書き込み
-st.write("#テキストの書き込み")
-st.write("タイトル表示")
-st.title('gruff_streamlit')
-
-st.write("latexを用いた数式の表示")
-st.latex("シュレディンガー方程式："r'''i\hbar\frac{\partial\psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2\psi}{\partial x^2}''')
-
-
-st.write("プログラミングコードの表示")
-code = '''import streamlit as st
-code = ...
-st.code(code, language="python")'''
-st.code(code, language="python")
-
-#データの表示
-st.write("#データの表示")
-st.table(pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-}))
+st.set_page_config(
+    page_title ='streamlit_omamiuda',
+    page_icon = '👍'
+    )
 
 
-#図、チャートの作成
-st.write("#図、チャートの作成")
-st.graphviz_chart('''
-    digraph {
-        User_interfae -> machine_A
-        machine_A -> machine_D
-        machine_A -> machine_C
-        User_interfae -> machine_B
-        machine_B -> machine_D
-        machine_B -> machine_C
-    }
-''')
+seiseki_df=pd.read_csv('https://statistics.co.jp/reference/statistical_data/seiseki.csv')
+
+st.title('主成分分析')
+
+st.write(seiseki_df)
+
+# 主成分分析実行
+pca = PCA()
+feature = pca.fit(seiseki_df)
+# データを主成分空間に写像
+feature = pca.transform(seiseki_df)
+
+st.write("・第１主成分と第２主成分でプロット")
+fig, ax = plt.subplots(figsize=(4,4))
+ax.scatter(feature[:, 0], feature[:, 1], alpha=0.8, c=list(seiseki_df.iloc[:, 1]))
+ax.grid()
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+
+st.pyplot(fig)
 
 
+st.write("・寄与率表示（index:0スタート）")
+pca.explained_variance_ratio_
 
-#ウィジェット（ボタンなど）の追加
-st.write("#ウィジェット（ボタンなど）の追加")
-if st.button('Say hello'):
-    st.write('Why hello there')
-else:
-    st.write('Goodbye')
-
-
-
-#メディア（画像）の追加
-st.write("#メディア（画像）の追加") 
-image = "https://twitfukuoka.com/wp-content/uploads/2019/04/201904040006.jpg"
-st.image(image, caption="令和", width=500, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
-
-#レイアウト設定
 add_selectbox = st.sidebar.selectbox(
     "#レイアウト設定",
-    ("Email", "Home phone", "Mobile phone")
+    ("第一成分", "第二成分", "第三成分")
 )
 
+with st.expander("参考"):
+    st.write("データ："+"https://statistics.co.jp/reference/statistical_data/statistical_data.htm")
+    st.write(" Webサイト："+"https://docs.streamlit.io/library/api-reference/control-flow/st.stopx")
+    st.write("作成コード："+"https://github.com/hajime7610/gruff/blob/main/streamlit_1.py")
 
-
+name = st.text_input('・分かったこと')
+if not name:
+  st.warning('''ex.寄与率が第二成分で80％を超えている''')
+  st.stop()
+st.success('Thank you for answering.')
 
